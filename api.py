@@ -3,18 +3,36 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from params import Score
 import pickle
+
 df = pd.read_csv('odi.csv')
 df=df.drop(['date'],axis=1)
 
 from typing import Optional
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins = [
+
+    "http://localhost",
+    "http://localhost:3000"
+
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=[""]
+)
+
 open_file = open('model.pkl', "rb")
 loaded_list = pickle.load(open_file)
-print(loaded_list)
+# print(loaded_list)
 model=loaded_list[0]
 scaler=loaded_list[1]
 
@@ -59,11 +77,16 @@ def predict_score(data:Score):
     for i in range(5):
         v[i]=encoders[i].transform([v[i]])
     
-    new_prediction = model.predict(scaler.transform(np.array([v],dtype="object")))
+    new_prediction = (model.predict(scaler.transform(np.array([v],dtype="object"))))
+    score="{:.2f}".format(new_prediction[0])
 
     return {
-        'Total_Score': new_prediction[0]
+        'Total_Score': score
     }
+
+#Example Input:
+# Sydney Cricket Ground	Sri Lanka	Australia	J Mubarak	NW Bracken	6	0	1.1	6	0	1	0	309
+
 
 #    Run the API with uvicorn
 #    Will run on http://127.0.0.1:8000
