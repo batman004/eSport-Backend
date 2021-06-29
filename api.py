@@ -3,17 +3,14 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from params import Score
 import pickle
-<<<<<<< HEAD
 
-=======
->>>>>>> 794d6bdab78bc8d0d85c44ad907ce8a0cacf3a83
 df = pd.read_csv('odi.csv')
 df=df.drop(['date'],axis=1)
 
 from typing import Optional
 
 from fastapi import FastAPI
-<<<<<<< HEAD
+
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -37,14 +34,14 @@ app.add_middleware(
 open_file = open('model.pkl', "rb")
 loaded_list = pickle.load(open_file)
 # print(loaded_list)
-=======
+
 
 app = FastAPI()
 
 open_file = open('model.pkl', "rb")
 loaded_list = pickle.load(open_file)
 print(loaded_list)
->>>>>>> 794d6bdab78bc8d0d85c44ad907ce8a0cacf3a83
+
 model=loaded_list[0]
 scaler=loaded_list[1]
 
