@@ -31,16 +31,11 @@ app.add_middleware(
     expose_headers=[""]
 )
 
-open_file = open('model.pkl', "rb")
-loaded_list = pickle.load(open_file)
-# print(loaded_list)
-
-
 app = FastAPI()
 
 open_file = open('model.pkl', "rb")
 loaded_list = pickle.load(open_file)
-print(loaded_list)
+# print(loaded_list)
 
 model=loaded_list[0]
 scaler=loaded_list[1]
@@ -64,7 +59,7 @@ df['bowler']=le_bowler.fit_transform(df['bowler'])
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Message": "Welcome to eSport"}
 
 
 @app.post('/predict')
@@ -81,7 +76,7 @@ def predict_score(data:Score):
     striker=data['striker']
     non_striker=data['non_striker']
     v=[venue,bat_team,bowl_team,batsman,bowler,runs,wickets,overs,striker,non_striker]
-    print(v)
+#     print(v)
     encoders=[le_ven,le_bat,le_bowl,le_bats,le_bowler]
     for i in range(5):
         v[i]=encoders[i].transform([v[i]])
@@ -94,7 +89,7 @@ def predict_score(data:Score):
     }
 
 #Example Input:
-# Sydney Cricket Ground	Sri Lanka	Australia	J Mubarak	NW Bracken	6	0	1.1	6	0	1	0	309
+# Sydney Cricket Ground	Sri Lanka	Australia	J Mubarak	NW Bracken	6	0	1.1	6	0	1	0	
 
 
 #    Run the API with uvicorn
